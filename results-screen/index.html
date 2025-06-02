@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SPOTER: Analysis Detail</title>
+    <meta name="description" content="A starter example with all elements and components used in Pico design system. Built with Pico CSS.">
+
+
+    <script>
+      function inIframe () {
+        try {
+          return window.self !== window.top;
+        } catch (e) {
+          return true;
+        }
+      }
+
+      if (inIframe()) {
+        if (window.confirm("Open the app as a standalone app, please.")) {
+          window.open("https://slr-ux-collab-assets-demo.hf.space/?__theme=light", "_blank");
+        }
+      }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+
+    <py-config>
+      packages = ["matplotlib", "pandas"]
+    </py-config>
+
+    <style media="screen">
+      @font-face {
+        font-family: 'Graphik-Regular';
+        src: url('Graphik/Graphik-Regular.woff') format('woff'), /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+        url('Graphik/GraphikRegular.otf') format('opentype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+      }
+
+      @font-face {
+        font-family: 'Graphik-Bold';
+        src: url('Graphik/GraphikBold.otf') format('opentype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+      }
+
+      html {
+        font-family: "Graphik-Regular" !important;
+      }
+
+      h1, h2, b {
+        font-family: "Graphik-Bold" !important;
+      }
+      :root {
+        --primary: #FEAE00 !important;
+        --primary-hover: #E09900 !important;
+      }
+
+      @media (max-width: 992px) {
+        .showOnlyDesktop {
+          display: none;
+        }
+      }
+
+      .animated .letter {
+        display: inline-block;
+      }
+
+      .base {
+        color: "black";
+      }
+
+      #pyscript_loading_splash p {
+        opacity: 0 !important;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <script type="text/javascript">
+
+      // Fetch URL parameters – "pred" should contain a list of predicted gloss, "conf" the respective confidences, and
+      // "origin" a URL with the originating recognition UI
+      params = new URLSearchParams(window.location.search);
+
+      filters = {
+        "movement" : "",
+        "hands": "",
+        "location": "",
+        "handshape": ""
+      };
+
+      handshapes = ['Y', '1', '1L', '3', '4', '5', '8', 'A', 'B', 'Baby O', 'Bent 3', 'Bent 5', 'Bent B', 'Bent L', 'Bent V', 'C', 'D', 'E', 'F', 'Flattened O', 'G', 'H', 'I', 'K', 'L', 'L1', 'M', 'N', 'O', 'Open 8', 'Open A', 'Open B', 'Open F', 'Open N', 'R', 'S', 'T', 'V', 'W', 'X'];
+
+      //
+      document.getElementById("back-button").onclick = function() {
+        window.location.replace(params.get("origin"));
+      };
+
+      //
+      function createSignInResultsPane(name, gif, confidence, description) {
+        /*
+        document.getElementById('results-area').innerHTML += "<article id=\"article\" style=\"float: left; width: 450px; padding: 40px; margin: 40px; height: 400px;\">\n" +
+                "            <h3 style=\"margin-bottom: 0 !important;\"><span style=\"color: gray;\">" + confidence + "%</span> " + name + "</h3>\n" +
+                "            <p>" + description + "</p>\n" +
+                "            <img src=\"" + gif + "\" style=\"width: 100%; height: 200px; object-fit: contain;\">\n" +
+                "          </article>";
+         */
+
+        var scoreConfidenceInterpretation = "";
+        if (confidence < 33) {
+          scoreConfidenceInterpretation = "<h3 style='color: #F4442E; opacity: 0.7; font-weight: 500; margin-bottom: 0 !important; display: inline-block; float: right;'>Unlikely</h3>";
+        } else if (confidence < 66) {
+          scoreConfidenceInterpretation = "<h3 style='color: #FDBB2F; opacity: 0.7; font-weight: 500; margin-bottom: 0 !important; display: inline-block; float: right;'>Possibly</h3>";
+        } else {
+          scoreConfidenceInterpretation = "<h3 style='color: #3EC300; opacity: 0.7; font-weight: 500; margin-bottom: 0 !important; display: inline-block; float: right;'>Probably</h3>";
+        }
+
+        document.getElementById('results-area').innerHTML += "<article id=\"article\" style=\"float: left; width: 450px; padding: 40px; margin: 40px; height: 400px;\">\n" +
+                "            <div style='display: inline-block; width: 100%;'><h3 style=\"margin-bottom: 0 !important; display: inline-block;\">" + name + "</h3>" + scoreConfidenceInterpretation + "</div>\n" +
+                "            <p>" + description + "</p>\n" +
+                "            <img src=\"" + gif + "\" style=\"width: 100%; height: 200px; object-fit: contain;\">\n" +
+                "          </article>";
+      }
+
+      //
+      function setFilterMovement(value) {
+        if (filters["movement"] !== value) {
+          if (filters["movement"]) {
+            unhighlightFilterSelectionLi(filters["movement"]);
+          }
+          filters["movement"] = value;
+          highlightFilterSelectionLi(value);
+        } else {
+          filters["movement"] = "";
+          unhighlightFilterSelectionLi(value);
+        }
+        possibleValues = ["uni-directional", "non-repeated", "repeated"];
+        updateFilterLabel();
+
+        redrawResultsTable = pyodideGlobals.get('redrawResultsTable');
+        redrawResultsTable();
+      }
+
+      function setFilterHands(value) {
+        if (filters["hands"] !== value) {
+          if (filters["hands"]) {
+            unhighlightFilterSelectionLi(filters["hands"]);
+          }
+          filters["hands"] = value;
+          highlightFilterSelectionLi(value);
+        } else {
+          filters["hands"] = "";
+          unhighlightFilterSelectionLi(value);
+        }
+        possibleValues = ["one-handed", "two-handed"];
+        updateFilterLabel();
+
+        redrawResultsTable = pyodideGlobals.get('redrawResultsTable');
+        redrawResultsTable();
+      }
+
+      function setFilterLocation(value) {
+        if (filters["location"] !== value) {
+          if (filters["location"]) {
+            unhighlightFilterSelectionLi(filters["location"]);
+          }
+          filters["location"] = value;
+          highlightFilterSelectionLi(value);
+        } else {
+          filters["location"] = "";
+          unhighlightFilterSelectionLi(value);
+        }
+        possibleValues = ["in-space", "face", "headside", "palm", "hand", "arm", "torso", "other"];
+        updateFilterLabel();
+
+        redrawResultsTable = pyodideGlobals.get('redrawResultsTable');
+        redrawResultsTable();
+      }
+
+
+      function setFilterHandshape(value) {
+        if (filters["handshape"] !== value) {
+          if (filters["handshape"]) {
+            unhighlightFilterSelectionLi(filters["handshape"]);
+          }
+          filters["handshape"] = value;
+          highlightFilterSelectionLi(value);
+        } else {
+          filters["handshape"] = "";
+          unhighlightFilterSelectionLi(value);
+        }
+        possibleValues = handshapes;
+        updateFilterLabel();
+
+        redrawResultsTable = pyodideGlobals.get('redrawResultsTable');
+        redrawResultsTable();
+      }
+
+      function resetFilter() {
+        if (filters["movement"]) {
+          unhighlightFilterSelectionLi(filters["movement"]);
+        }
+        if (filters["hands"]) {
+          unhighlightFilterSelectionLi(filters["hands"]);
+        }
+        if (filters["location"]) {
+          unhighlightFilterSelectionLi(filters["location"]);
+        }
+        if (filters["handshape"]) {
+          unhighlightFilterSelectionLi(filters["handshape"]);
+        }
+
+        filters["movement"] = "";
+        filters["hands"] = "";
+        filters["location"] = "";
+        filters["handshape"] = "";
+
+        updateFilterLabel();
+        redrawResultsTable();
+      }
+
+      function highlightFilterSelectionLi(value) {
+        console.log("filter-selection--" + value);
+        document.getElementById("filter-selection--" + value).style.backgroundColor = "rgba(253, 187, 48, 0.5)";
+
+        if (handshapes.includes(value)) {
+          document.getElementById("filter-selection--" + value).style.borderColor = "rgba(253, 187, 48)";
+        }
+      }
+
+      function unhighlightFilterSelectionLi(value) {
+        console.log("filter-selection--" + value);
+        document.getElementById("filter-selection--" + value).style.backgroundColor = "";
+
+        if (handshapes.includes(value)) {
+          document.getElementById("filter-selection--" + value).style.borderColor = "var(--secondary)";
+        }
+      }
+
+      function capitalize(word) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      }
+
+      function updateFilterLabel() {
+        filterSpecification = "<b>Applied filter:</b> ";
+
+        if (!filters["movement"] && !filters["hands"] && !filters["location"] && !filters["handshape"] ) {
+          filterSpecification += "None";
+        }
+
+        if (filters["movement"]) {
+          filterSpecification += capitalize(filters["movement"]) + " <span style='opacity: 0.7;'>(Movement)</span>, ";
+        }
+
+        if (filters["hands"]) {
+          filterSpecification += capitalize(filters["hands"]) + " <span style='opacity: 0.7;'>(# Hands)</span>, ";
+        }
+
+        if (filters["location"]) {
+          filterSpecification += capitalize(filters["location"]) + " <span style='opacity: 0.7;'>(Location)</span>, ";
+        }
+
+        if (filters["handshape"]) {
+          filterSpecification += capitalize(filters["handshape"]) + " <span style='opacity: 0.7;'>(Handshape)</span>, ";
+        }
+
+        if (filterSpecification.endsWith(", ")) {
+          filterSpecification = filterSpecification.substr(0, filterSpecification.length - 2);
+        }
+
+        document.getElementById("filter-specification").innerHTML = filterSpecification;
+      }
+
+      function clearResultsArea() {
+        document.getElementById("results-area").innerHTML = "";
+      }
+
+      function createObject(object, variableName){
+        let execString = variableName + " = object";
+        eval(execString);
+      }
+
+    </script>
+
+    <py-script>
+
+      # Import libraries
+      import pandas as pd
+      import matplotlib.pyplot as plt
+
+      #
+      import pyscript
+      from js import document, params, filters, clearResultsArea, createSignInResultsPane, createObject
+      from pyodide.ffi import create_proxy
+      from pyodide.http import open_url
+
+      createObject(create_proxy(globals()), "pyodideGlobals")
+
+      def handleClearFilters(evt):
+        #print(params.get("hi"))
+        pass
+
+      handle_proxy = create_proxy(handleClearFilters)
+
+      clearFiltersButton = document.getElementById("clear-button")
+      clearFiltersButton.addEventListener("click", handle_proxy)
+
+      #
+
+      pred_order = [int(i) for i in params.get("pred").split(",")]
+      pred_conf = [int(i) for i in params.get("conf").split(",")]
+
+      # todo reimplement -- read from URL (FTP)
+      df = pd.read_csv(open_url("https://data.matsworld.io/spoter/final-gloss-specifier.csv"), encoding="utf-8")
+      df = df.fillna("—")
+
+      # createSignInResultsPane("Make", "gif/2.gif", 8)
+
+      def redrawResultsTable():
+        clearResultsArea()
+
+        for (item_wlasl_id, item_pred_conf) in zip(pred_order, pred_conf):
+
+          selected_gloss = df[df["WLASL Identifier"] == item_wlasl_id].to_dict(orient='records')[0]
+
+          if filters.movement:
+            if selected_gloss["Movement"] != filters.movement:
+              continue
+
+          if filters.hands:
+            if selected_gloss["Number of Hands"] != filters.hands:
+              continue
+
+          if filters.location:
+            if selected_gloss["Location"] != filters.location:
+              continue
+
+          if filters.handshape:
+            if selected_gloss["Handshape"].lower() != filters.handshape.lower():
+              continue
+
+          handshapeCap = selected_gloss["Handshape"][0:1].upper() + selected_gloss["Handshape"][1:]
+          createSignInResultsPane(selected_gloss["Sign"].lower().capitalize(), "https://data.signlanguagerecognition.com/gif/" + str(item_wlasl_id) + ".gif", item_pred_conf, selected_gloss["Movement"].capitalize() + ", " + selected_gloss["Number of Hands"].capitalize() + ", " + selected_gloss["Location"].capitalize() + ", " + handshapeCap + " handshape")
+
+      redrawResultsTable()
+
+    </py-script>
+
+    <script type="text/javascript">
+
+    </script>
+
+    <header class="container" style="padding-bottom: 0 !important;">
+      <hgroup>
+        <div class="grid">
+
+          <div>
+            <img src="static/spoter-logo.png" style="width: 120px;">
+        <h2 style="--typography-spacing-vertical: 0 !important; typography-spacing-vertical: 0 !important;">Analysis detail</h2>
+          </div>
+
+          <div></div>
+
+        <div style="align: right; vertical-align: middle; margin-top: auto; width: auto !important;"><div class="grid">
+          <button style="width: auto !important;'" class="secondary" id="back-button" onclick="window.location.replace(params.get('origin'))">Back</button>
+          <button style="width: auto !important;'" class="secondary" id="clear-button" onclick="resetFilter()">Reset filter</button>
+        </div></div>
+        </div>
+      </hgroup>
+
+      <hr>
+
+    </header>
+
+    <main class="container">
+
+      <section>
+
+        <nav>
+
+        <ul>
+          <li>
+            <details role="list">
+              <summary aria-haspopup="listbox">Movement</summary>
+              <ul role="listbox">
+                <li><a onclick="setFilterMovement('uni-directional')" id="filter-selection--uni-directional">Uni-directional</a></li>
+                <li><a onclick="setFilterMovement('non-repeated')" id="filter-selection--non-repeated">Non-repeated</a></li>
+                <li><a onclick="setFilterMovement('repeated')" id="filter-selection--repeated">Repeated</a></li>
+              </ul>
+            </details>
+          </li>
+          <li>
+            <details role="list">
+              <summary aria-haspopup="listbox"># Hands</summary>
+              <ul role="listbox">
+                <li><a onclick="setFilterHands('one-handed')" id="filter-selection--one-handed">One-handed</a></li>
+                <li><a onclick="setFilterHands('two-handed')" id="filter-selection--two-handed">Two-handed</a></li>
+              </ul>
+            </details>
+          </li>
+          <li>
+            <details role="list">
+              <summary aria-haspopup="listbox">Locations</summary>
+              <ul role="listbox">
+                <li><a onclick="setFilterLocation('in-space')" id="filter-selection--in-space">In space</a></li>
+                <li><a onclick="setFilterLocation('face')" id="filter-selection--face">Face</a></li>
+                <li><a onclick="setFilterLocation('headside')" id="filter-selection--headside">Headside</a></li>
+                <li><a onclick="setFilterLocation('palm')" id="filter-selection--palm">Palm</a></li>
+                <li><a onclick="setFilterLocation('hand')" id="filter-selection--hand">Hand</a></li>
+                <li><a onclick="setFilterLocation('arm')" id="filter-selection--arm">Arm</a></li>
+                <li><a onclick="setFilterLocation('torso')" id="filter-selection--torso">Torso</a></li>
+                <li><a onclick="setFilterLocation('other')" id="filter-selection--other">Other</a></li>
+              </ul>
+            </details>
+          </li>
+          <li>
+              <a data-target="modal-example" onclick="toggleModal(event)"><button style="border-color: rgb(162, 175, 185) !important;" class="secondary outline">Handshape</button></a>
+          </li>
+        </ul>
+
+      </nav>
+        <p id="filter-specification"><b>Applied filter:</b> None</p>
+
+        <div style="display: inline-block; float:left;" id="results-area">
+
+          <!--<article id="article" style="float: left; width: 450px; padding: 40px; margin: 40px;">
+            <h3 style="margin-bottom: 0 !important;"><span style="color: gray;">92%</span> Sign</h3>
+            <p>Details about this sign</p>
+            <img src="gif/hello.gif" style="width: 100%;">
+          </article>-->
+
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Minimal theme switcher -->
+    <script src="../js/minimal-theme-switcher.js"></script>
+
+    <script>
+    // Set indeterminate progress bar
+    document.getElementById('progress-2').indeterminate = true;
+    </script>
+
+      <dialog id="modal-example">
+      <article>
+        <a href="#close" aria-label="Close" class="close" data-target="modal-example" onclick="toggleModal(event)"></a>
+        <h3>Handshape filter</h3>
+
+        <div style="display: inline-block;" id="handshapes-area">
+
+        </div>
+
+        <script>
+          handshapes.forEach(function (item, index) {
+            document.getElementById("handshapes-area").innerHTML += "<button id='filter-selection--" + item + "' onclick='setFilterHandshape(\"" + item + "\")' style='display: inline-block; width: 85px; float:left; margin: 5px;' class='secondary outline'><img src='https://data.signlanguagerecognition.com/handshape/" + item + ".png' style='width: 100%; height: 100%;'></button>"
+          });
+
+        </script>
+
+        <footer>
+          <a href="#confirm" role="button" data-target="modal-example" onclick="toggleModal(event)">Confirm</a>
+        </footer>
+      </article>
+    </dialog>
+
+      <script src="modal.js"></script>
+
+  </body>
+
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Test Your Knowledge</title>
+        <link rel="stylesheet" type="text/css" href="./test.css">
+    </head>
+    <body>
+        <header>
+            <nav>
+                <a href="home.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="resources.html">Resources</a>
+                <a href="test.html">Test</a>
+            </nav>
+            <input id="searchbar" onkeyup="search_term()" type="text" name="search" placeholder="Search terms..." />
+            <ul id="search-results"></ul>
+        </header>
+
+        <h1>
+            <div id="term-display">Press the button to get a term</div>
+        </h1>
+
+            <div class="video-container">
+                <button id="term-btn">Get Term</button>
+                <video id="recordedVideo" autoplay muted></video>
+                <button id="start-btn">Start Recording</button>
+                <button id="stop-btn">Stop Recording</button>
+                <button id="submit-btn">Submit</button>
+                <input type="hidden" name="scriptName" id="scriptName" value="Submit" />
+            </div>
+
+        </div>
+
+        <script type="module" src="./constants.js"></script>
+        <script type="module" src="./test.js"></script>
+        <script type="module" src="./header.js"></script>
+        
+    </body>
+
+    <footer>
+        <p>&copy; 2025 KrishnanMcLaren. All Rights Reserved.</p>
+    </footer>
+</html>
