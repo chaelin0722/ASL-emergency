@@ -1,6 +1,11 @@
 // i moved all the search functionality into a separate js file so that if we need to change it we only need to modify one file
 
 document.addEventListener('DOMContentLoaded', () => {
+    // 테스트 관련 로컬 스토리지 초기화
+    const resetKeys = ["terms", "currentIndex", "reviewTerms", "wasCorrect", "testedTerm"];
+    resetKeys.forEach(key => localStorage.removeItem(key));
+    console.log("Clean local storage");
+
     // handle checkbox enabling/disabling
     const buttonItems = document.querySelectorAll('.btn-item'); // gets buttons on home page (under class 'btn-item')
 

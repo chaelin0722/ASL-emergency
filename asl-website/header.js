@@ -35,4 +35,4 @@ function search_term() {
 }
 
 const searchbar = document.getElementById('searchbar');
-searchbar.addEventListener('keyup', search_term);
+//searchbar.addEventListener('keyup', search_term);

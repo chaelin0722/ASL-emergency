@@ -3,9 +3,6 @@ import os
 import subprocess
 import argparse
 import ffmpeg
-
-#os.environ["CUDA_DEVICbreE_ORDER"] = "PCI_BUS_ID"
-#os.environ["CUDA_VISIBLE_DEVICES"] = '3'
 import json
 import torch
 import torch.nn
@@ -24,7 +21,7 @@ from architecture.st_gcn import STGCN
 from architecture.fc import FC
 from architecture.network import Network
 
-weight = "/Users/madhangikrishnan/Documents/GitHub/krishnanmclaren-capstone/asl-website/_training_from_aslcitizen_capstone002400_0.814685.pt"
+weight = "/Users/zzenninkim/Documents/Research/asl-emergency/model/ST-GCN/ASL_citizen_stgcn_weights.pt"
 
 #Given a sorted output from the model aka ranked list, returns
 #rank of ground truth and list of other metrics
@@ -68,28 +65,9 @@ torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 torch.set_default_dtype(torch.float64)
 
-#Update files and paths as needed
-video_base_path = '../data/poses/'
-train_file = '../data_csv/aslcitizen_training_set.csv'
-test_file = '../data_csv/aslcitzen_test_set.csv'
-#Update names according to experiment number
-tag = 'experiment1b'
-dataset_name = "training_full"
-
 device = torch.device("cpu")
-'''
-train_transforms = pose_transforms.Compose([pose_transforms.ShearTransform(0.1),
-                                            pose_transforms.RotatationTransform(0.1)])
-#load data
-train_ds = Dataset(datadir=video_base_path, video_file=train_file, transforms=train_transforms, pose_map_file = "pose_mapping_train.csv")
-test_ds = Dataset(datadir=video_base_path, video_file=test_file, gloss_dict=train_ds.gloss_dict, pose_map_file = "pose_mapping_test.csv")
-n_classes = len(train_ds.gloss_dict)
 
-
-test_loader = torch.utils.data.DataLoader(test_ds, batch_size=1, shuffle=True, num_workers=2, pin_memory=True)
-'''
-
-n_classes = 24
+n_classes = 2731
 
 
 #load model
@@ -107,6 +85,14 @@ pose_model = Network(encoder=stgcn, decoder=fc)
 #print(os.getcwd())
 pose_model.load_state_dict(torch.load((weight),map_location=torch.device('cpu')))
 pose_model.to(device)
+
+
+#checkpoint = torch.load(weight, map_location=torch.device('cpu'))
+#pose_model.load_state_dict(checkpoint["model_state_dict"])
+#pose_model.to(device)
+
+
+
 
 pose_model.train(False)  # Set model to evaluate mode
 
@@ -173,7 +159,7 @@ def read_time_segments(file_path):
 
 def recognize_segments_in_video(pose_npy_path, fps):
     result_list = []
-    df = pd.read_csv('/Users/madhangikrishnan/Documents/GitHub/krishnanmclaren-capstone/asl-website/ASL_gloss_24.csv')
+    df = pd.read_csv('/Users/zzenninkim/Documents/Research/asl-emergency/model/ST-GCN/ASLcitizen_gloss_labels.csv')
     index_to_gloss = dict(zip(df["Index"], df["Gloss"]))
 
     # .npy  (T, V, C) == (num of frames, num of landmarks, XY)
@@ -185,35 +171,44 @@ def recognize_segments_in_video(pose_npy_path, fps):
     if length < 128:
         pose_data = np.pad(pose_data, ((0, 128 - length), (0, 0), (0, 0)))  # pad empty tensors
 
+    shoulder_l = pose_data[:, 11, :]
+    shoulder_r = pose_data[:, 12, :]
 
-    # keypoints structure
-    posedata = pose_data[:, 0:33, :]  # 33 poses
-    lhdata = pose_data[:, 54:, :]  # left hand
-    rhdata = pose_data[:, 33:54, :]  # right hand
+    center = np.zeros(2)
+    for i in range(len(shoulder_l)):
+        center_i = (shoulder_r[i] + shoulder_l[i]) / 2
+        center = center + center_i
+    center = center / shoulder_l.shape[0]
+
+    mean_dist = np.mean(np.sqrt(((shoulder_l - shoulder_r) ** 2).sum(-1)))
+    if mean_dist != 0:
+        scale = 1.0 / mean_dist
+        pose_data  = pose_data  - center
+        pose_data  = pose_data  * scale
+
+    # select 27 key points
+    keypoints = [0, 2, 5, 11, 12, 13, 14, 33, 37, 38, 41, 42, 45, 46,
+                 49, 50, 53, 54, 58, 59, 62, 63, 66, 67, 70, 71, 74]
+    pose_data = pose_data[:, 0:75, :]
+    posedata = pose_data[:, 0:33, :]
+    lhdata = pose_data[:, 54:, :]
+    rhdata = pose_data[:, 33:54, :]
 
 
 
     data = np.concatenate([posedata, lhdata, rhdata], axis=1)
-
-    # get key points
-    keypoints = [0, 2, 5, 11, 12, 13, 14, 33, 37, 38, 41, 42, 45, 46,
-                49, 50, 53, 54, 58, 59, 62, 63, 66, 67, 70, 71, 74]
     data = data[:, keypoints, :]
-
-
     data = np.transpose(data, (2, 0, 1))  # (T, V, C) → (C, T, V)  xy, frames, num of landmarks
-    #segmented_pose_data = segmented_pose_data[:, :, keypoints_idx]  # (C, T, V) → (C, T, 27)
-
 
     # change to tensor
-    #inputs = torch.from_numpy(data).double()
-    inputs = torch.as_tensor(np.array(data).astype('float'))
+    inputs = torch.from_numpy(data).double()
     inputs = inputs.unsqueeze(0)  # (C, T, V) → (1, C, T, V)
 
     # inputs.shape == (N, C, T, V)  # (batch, channels, frames, keypoints)
     predictions = pose_model(inputs)
 
     y_pred_tag = torch.softmax(predictions, dim=1)
+    # check = torch.argsort(predictions, dim=1, descending=True)
     pred_args = torch.argsort(y_pred_tag, dim=1, descending=True)
 
     # bring top 20 results
@@ -224,7 +219,7 @@ def recognize_segments_in_video(pose_npy_path, fps):
     mapped_labels = [index_to_gloss[idx] for idx in top_20_preds]
     gloss_pred = [[word, score] for word, score in zip(mapped_labels, top_20_confidences)]
     #print("top 20 results: ", top_20_preds, ",", mapped_labels)
-    result_list.append( gloss_pred) # original
+    result_list.append(gloss_pred) # original
 
     # insert logic for 0.5 cutoff in determining correctness
 
@@ -237,7 +232,7 @@ def convert_to_mp4(video_path):
     """
     output_mp4 = os.path.splitext(video_path)[0] + ".mp4"
 
-    # WebM 파일이면 변환 수행
+    # convert video format to mp4
     if video_path.lower().endswith(".webm"):
         print(f"Converting {video_path} to {output_mp4}...")
         command = [
@@ -256,14 +251,11 @@ def get_args():
 
     return parser.parse_args()
 
-# 실행 부분
+
 if __name__ == "__main__":
     args = get_args()
     video_path = args.video
 
-    #video_path = "./asl-website/recorded-videos/recorded-video.webm"
-    # video_path = "C:\\Users\\calyp\\OneDrive\\Documents\\GitHub\\krishnanmclaren-capstone\\asl-website\\recorded-videos\recorded-video.webm"
-    #video_path = "/Users/madhangikrishnan/Documents/GitHub/krishnanmclaren-capstone/asl-website/recorded-videos/recorded-video.webm"
     video_path = convert_to_mp4(video_path)
     print("Start ASL recognition")
 

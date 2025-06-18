@@ -10,35 +10,104 @@
     <header>
         <nav>
             <a href="home.html">Home</a>
-            <a href="about.html">About</a>
             <a href="resources.html">Resources</a>
             <a href="test.html">Test</a>
+            <a href="about.html">About</a>
         </nav>
     </header>
 
     <h2 class="results-title">Recognition Results</h2>
+    <h3 id="result-message" style="margin-top: 20px; color: darkblue; text-align: center;"></h3>
 
     <div class="prediction-container">
         <div class="prediction-block" id="prediction-1">
             <p class="prediction-label">(prediction 1)</p>
             <video controls></video>
         </div>
-        <div class="prediction-block" id="prediction-2">
-            <p class="prediction-label">(prediction 2)</p>
-            <video controls></video>
-        </div>
-        <div class="prediction-block" id="prediction-3">
-            <p class="prediction-label">(prediction 3)</p>
-            <video controls></video>
-        </div>
     </div>
     
     <script>
+
+
         document.addEventListener('DOMContentLoaded', () => {
+            // init buttons
+            const nextBtn = document.getElementById("next-btn");
+            const retryBtn = document.getElementById("retry-btn");
+            const predictionContainer = document.querySelector('.prediction-container');
+
             const rawResult = localStorage.getItem('recognitionResult');
             const predictions = rawResult ? JSON.parse(rawResult)[0] : [];
-    
-            if (rawResult) {
+
+            const testedTerm = localStorage.getItem('testedTerm');
+            console.log("▶ testedTerm:", testedTerm);
+            // count second trial
+            const retryCountKey = `retryCount-${testedTerm}`;
+            let retryCount = Number(localStorage.getItem(retryCountKey) || 0);
+
+            const topPrediction_ = predictions?.[0]?.[0] || ""; // top-1 prediction
+            const topPrediction = topPrediction_.replace(/\d+$/, '').trim().toUpperCase();  // remove number included in the term
+            const topConfidence = predictions?.[0]?.[1];  // confidence는 숫자
+
+            console.log("▶ testedTerm:", testedTerm);
+            console.log("▶ topPredictionRaw:", topPrediction_);
+            console.log("▶ topPrediction (cleaned):", topPrediction);
+
+            let isCorrect = "false"; // true or false
+            // message
+            const messageElement = document.getElementById("result-message");
+
+            if (topPrediction === testedTerm) {
+                console.log("correct!");
+                messageElement.innerText = "Correct!";
+                messageElement.style.color = "green";
+
+                nextBtn.style.display = "inline-block";
+                retryBtn.style.display = "none";
+
+                // remove tested current term
+                let terms = JSON.parse(localStorage.getItem("terms") || "[]");
+                terms = terms.filter(term => term !== testedTerm);
+                localStorage.setItem("terms", JSON.stringify(terms));
+                // to move on next term
+                localStorage.setItem("wasCorrect", "true");
+                localStorage.removeItem("testedTerm");
+
+
+            } else if (retryCount === 1) {
+                // Second incorrect trial
+                messageElement.innerText = "We will be back soon";
+                messageElement.style.color = "gray";
+
+                // push current term to the last
+                let terms = JSON.parse(localStorage.getItem("terms") || "[]");
+                terms = terms.filter(term => term !== testedTerm);
+                terms.push(testedTerm);
+                // save
+                localStorage.setItem("terms", JSON.stringify(terms));
+                localStorage.removeItem(retryCountKey);
+                localStorage.setItem("wasCorrect", "true");
+
+                // init retry count key to 0
+                localStorage.setItem(retryCountKey, "0");
+                //remove current term
+                localStorage.removeItem("testedTerm");
+                // move on to next term test page after 2000mili sec
+                setTimeout(() => {
+                    window.location.href = "test.html";
+                }, 2000);
+            }else{
+                // first incorrect trial
+                messageElement.innerText = "Try Again";
+                messageElement.style.color = "red";
+                // +1 for retry count key
+                localStorage.setItem(retryCountKey, retryCount + 1);
+                nextBtn.style.display = "none";
+                retryBtn.style.display = "inline-block";
+
+                localStorage.setItem("wasCorrect", "false");
+            }//end else
+
+            if (topPrediction === testedTerm) {
                 predictions
                     .sort((a, b) => b[1] - a[1])
                     .slice(0, 3)
@@ -47,23 +116,38 @@
                         if (block) {
                             block.querySelector('.prediction-label').innerText =
                                 `${label} (Confidence: ${(confidence * 100).toFixed(2)}%)`;
-                            block.querySelector('video').src = './ASL_Videos'; // Change path if needed
+
+                            const VideoPath = `./ASL_Videos/${label}.mp4`
+                            block.querySelector('video').src = VideoPath; // Change path if needed
                         }
                     });
             } else {
-                document.getElementById('result-display').innerText = "No recognition result found.";
+                //document.getElementById('result-display').innerText = "No recognition result found.";
+                predictionContainer.style.display = "none";
             }
+            retryBtn.addEventListener("click", () => {
+                window.location.href = "test.html"; // Same term remains in localStorage
+            });
+            nextBtn.addEventListener("click", () => {
+                localStorage.removeItem("testedTerm"); // 다음 단어로 이동하게 함
+                console.log("▶ after remove testedTerm:", testedTerm);
+                window.location.href = "test.html";
+            });
+
+            // 결과 확정
+            localStorage.setItem("wasCorrect", isCorrect);
         });
     </script>
-    <ul>
-        <a href="test.html" class="btn-item">Next</a>
-    </ul>
+    <div style="text-align:center;">
+        <a href="test.html" class="btn-item" id="next-btn" style="display:none;">Next</a>
+        <button id="retry-btn" class="btn-item" style="display:none;">Retry</button>
+    </div>
 
     <footer>
         <p>&copy; 2025 KrishnanMcLaren. All Rights Reserved.</p>
     </footer>
 
-    <script src="./feedback.js"></script> <!--calls js file to fill page w proper video-->>
+    <script src="./feedback.js"></script> <!--calls js file to fill page w proper video-->
 
 </body>
 </html>

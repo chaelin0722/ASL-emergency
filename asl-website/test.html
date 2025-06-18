@@ -11,11 +11,11 @@
         <header>
             <nav>
                 <a href="home.html">Home</a>
-                <a href="about.html">About</a>
                 <a href="resources.html">Resources</a>
                 <a href="test.html">Test</a>
+                <a href="about.html">About</a>
             </nav>
-            <input id="searchbar" onkeyup="search_term()" type="text" name="search" placeholder="Search terms..." />
+            <!--<input id="searchbar" onkeyup="search_term()" type="text" name="search" placeholder="Search terms..." />-->
             <ul id="search-results"></ul>
         </header>
 
@@ -24,7 +24,7 @@
         </h1>
 
             <div class="video-container">
-                <button id="term-btn">Get Term</button>
+                <!--<button id="term-btn"> Get Term </button>-->
                 <video id="recordedVideo" autoplay muted></video>
                 <button id="start-btn">Start Recording</button>
                 <button id="stop-btn">Stop Recording</button>
@@ -32,7 +32,6 @@
                 <input type="hidden" name="scriptName" id="scriptName" value="Submit" />
             </div>
 
-        </div>
 
         <script type="module" src="./constants.js"></script>
         <script type="module" src="./test.js"></script>
