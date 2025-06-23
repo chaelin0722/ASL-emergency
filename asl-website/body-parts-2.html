@@ -18,58 +18,8 @@
 
     <div class="main-content">
         <h1>Terms and Videos</h1>
-        <div class="container">
-            <!-- Repeat this block for each term and video pair -->
-            <div class="item">
-                <div class="video-container">
-                    <video src="./ASL_Videos/jaw.mp4" class="video" controls></video>
-                </div>
-                <div class="term">JAW</div>
-            </div>
-            <div class="item">
-                <div class="video-container">
-                    <video src="./ASL_Videos/leg.mp4" class="video" controls></video>
-                </div>
-                <div class="term">LEGS</div>
-            </div>
-            <div class="item">
-                <div class="video-container">
-                    <video src="./ASL_Videos/lungs.mp4" class="video" controls></video>
-                </div>
-                <div class="term">LUNGS</div>
-            </div>
-            <div class="item">
-                <div class="video-container">
-                    <video src="./ASL_Videos/nose.mp4" class="video" controls></video>
-                </div>
-                <div class="term">NOSE</div>
-            </div>
-            <div class="item">
-                <div class="video-container">
-                    <video src="./ASL_Videos/rib.mp4" class="video" controls></video>
-                </div>
-                <div class="term">RIBS</div>
-            </div>
-            <div class="item">
-                <div class="video-container">
-                    <video src="./ASL_Videos/stomachcramps.mp4" class="video" controls></video>
-                </div>
-                <div class="term">STOMACH CRAMPS</div>
-            </div>
-            <div class="item">
-                <div class="video-container">
-                    <video src="./ASL_Videos/throat.mp4" class="video" controls></video>
-                </div>
-                <div class="term">THROAT</div>
-            </div>
-            <div class="item">
-                <div class="video-container">
-                    <video src="./ASL_Videos/wrist.mp4" class="video" controls></video>
-                </div>
-                <div class="term">WRIST</div>
-            </div>
-            <!-- Add more items as needed -->
-        </div>
+
+        <div class="container" id="video-list"></div>
 
         <ul>
             <a href="test.html" class="btn-item">Test Your Knowledge</a>
@@ -81,3 +31,34 @@
     </footer>
 </body>
 </html>
+
+<script>
+  const container = document.getElementById('video-list');
+
+  fetch('./csv_terms/body-parts-2.csv')
+    .then(response => response.text())
+    .then(csvData => {
+      const lines = csvData.trim().split('\n');
+      const headers = lines[0].split(','); // ["term"]
+
+      const rows = lines.slice(1); // skip header
+
+      rows.forEach(line => {
+        const termRaw = line.trim();
+        const videoFilename = termRaw.toLowerCase().replace(/\s+/g, '') + ".mp4";
+
+        const itemHTML = `
+          <div class="item">
+            <div class="video-container">
+              <video src="./ASL_Videos/${videoFilename}" class="video" controls></video>
+            </div>
+            <div class="term">${termRaw}</div>
+          </div>
+        `;
+        container.insertAdjacentHTML('beforeend', itemHTML);
+      });
+    })
+    .catch(error => {
+      console.error("Failed to load CSV:", error);
+    });
+</script>

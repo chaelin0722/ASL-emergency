@@ -35,7 +35,7 @@
 <script>
   const container = document.getElementById('video-list');
 
-  fetch('./csv_terms/substance_related.csv')
+  fetch('./csv_terms/others.csv')
     .then(response => response.text())
     .then(csvData => {
       const lines = csvData.trim().split('\n');

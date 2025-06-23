@@ -1,2 +1,7 @@
 *.env
 node_modules
+*.mp4
+*.npy
+*.json
+*.webm
+*.pt

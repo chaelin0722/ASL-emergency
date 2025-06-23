@@ -1,8 +1,0 @@
-opencv-python
-mediapipe
-pandas
-torch==1.13.1
-numpy
-scikit-learn
-protobuf==3.20.1
-gradio==4.16.0

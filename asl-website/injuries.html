@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms and Videos</title>
-    <link rel="stylesheet" type="text/css" href="./injuries.css">
+    <link rel="stylesheet" type="text/css" href="./body-parts-2.css">
 </head>
 <body>
     <header>
@@ -18,39 +18,8 @@
 
     <div class="main-content">
         <h1>Terms and Videos</h1>
-        <div class="container">
-            <!-- Repeat this block for each injury and video pair -->
-            <div class="item">
-                <div class="video-container">
-                    <video src="./ASL_Videos/scrape.mp4" class="video" controls></video>
-                </div>
-                <div class="term">SCRAPE</div>
-            </div>
-            <div class="item">
-                <div class="video-container">
-                    <video src="./ASL_Videos/stab.mp4" class="video" controls></video>
-                </div>
-                <div class="term">STAB</div>
-            </div>
-            <div class="item">
-                <div class="video-container">
-                    <video src="./ASL_Videos/stitch.mp4" class="video" controls></video>
-                </div>
-                <div class="term">STITCH</div>
-            </div>
-            <div class="item">
-                <div class="video-container">
-                    <video src="./ASL_Videos/cut.mp4" class="video" controls></video>
-                </div>
-                <div class="term">CUT</div>
-            </div>
-            <div class="item">
-                <div class="video-container">
-                    <video src="./ASL_Videos/burn.mp4" class="video" controls></video>
-                </div>
-                <div class="term">BURN</div>
-            </div>
-        </div>
+
+        <div class="container" id="video-list"></div>
 
         <ul>
             <a href="test.html" class="btn-item">Test Your Knowledge</a>
@@ -62,3 +31,34 @@
     </footer>
 </body>
 </html>
+
+<script>
+  const container = document.getElementById('video-list');
+
+  fetch('./csv_terms/injuries.csv')
+    .then(response => response.text())
+    .then(csvData => {
+      const lines = csvData.trim().split('\n');
+      const headers = lines[0].split(','); // ["term"]
+
+      const rows = lines.slice(1); // skip header
+
+      rows.forEach(line => {
+        const termRaw = line.trim();
+        const videoFilename = termRaw.toLowerCase().replace(/\s+/g, '') + ".mp4";
+
+        const itemHTML = `
+          <div class="item">
+            <div class="video-container">
+              <video src="./ASL_Videos/${videoFilename}" class="video" controls></video>
+            </div>
+            <div class="term">${termRaw}</div>
+          </div>
+        `;
+        container.insertAdjacentHTML('beforeend', itemHTML);
+      });
+    })
+    .catch(error => {
+      console.error("Failed to load CSV:", error);
+    });
+</script>
