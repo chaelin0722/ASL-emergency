@@ -7,8 +7,7 @@ Deaf and Hard of Hearing (DHH) individuals face serious communication barriers i
 - A vocabulary learning module tailored to emergency contexts
 - AI-based recognition and feedback to practice ASL terms
 - Video-based input and testing system for real-time feedback
-
----
+ 
 
 ## 📁 Project Structure
 ```
@@ -17,8 +16,7 @@ Deaf and Hard of Hearing (DHH) individuals face serious communication barriers i
 ├── model/                    # Python scripts and ML models for recognition 
 ├── .firebase/ and config     # Firebase (optional, not active in this version)
 ```
-
----
+ 
 
 ## 🔧 Installation
 
@@ -39,14 +37,15 @@ If using the Python-based inference system:
 cd model
 pip install -r requirements.txt
 ```
-
----
+ 
 
 ## ▶️ Running the Program
 
 ### 1. Start the Node.js Backend Server
 This handles file uploads and calls the Python recognition script.
 ```bash
+cd asl-website
+conda activate SLD-2025
 node backend.js
 ```
 By default, it runs on `http://localhost:3000`
@@ -54,21 +53,21 @@ By default, it runs on `http://localhost:3000`
 ### 2. Start the Frontend
 From the root directory:
 ```bash
+cd asl-website
 python3 -m http.server 8080
 ```
-Visit the application in your browser at: `http://localhost:8080/asl-website/`
-
----
+Visit the application in your browser at: `http://localhost:8080/home.html`
+ 
 
 ## ✨ Features
-- Upload a signing video and run inference to identify the signed ASL term
+- Record a signing video and run inference to identify the signed ASL term
 - Receive top predictions and immediate visual feedback
 - Interactive testing mode with retry logic:
   - 1st wrong attempt → retry
   - 2nd wrong attempt → skip and proceed to next term
 - Vocabulary focused on 79 emergency-related ASL glosses
 
----
+ 
 
 ## 👩‍⚕️ Target Users
 - EMS personnel (paramedics, EMTs)
