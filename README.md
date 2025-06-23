@@ -1,19 +1,81 @@
-# CHI 2025 Sign Language Dictionary
+# Signing for Care: ASL Learning Tool for Emergency Responders
 
-## Setup
+This repository contains the codebase for **"Signing for Care: A Demo and Initial Evaluation of an American Sign Language Learning Tool for Emergency Medical Responders"**, a prototype designed to support emergency medical service (EMS) providers in acquiring essential ASL vocabulary. 
 
-Create a Conda environment with Python=>3.9. Once activated, install the dependencies using `pip install -r requirements.txt`.
+Deaf and Hard of Hearing (DHH) individuals face serious communication barriers in emergency healthcare settings, where the absence of interpreters can result in delayed or improper treatment. This system provides EMS personnel with:
 
-Depending on where you host the main dictionary interface (see Section Run > Main dictionary interface), make sure to change all mentions of `$HOST_MAIN$` to a relevant URL. Similarly, depending on your hosting choice for the detailed analysis (see section Run > Detailed Analysis below), make sure to change all instances of `$HOST_DETAIL$` to a relevant URL.
+- A vocabulary learning module tailored to emergency contexts
+- AI-based recognition and feedback to practice ASL terms
+- Video-based input and testing system for real-time feedback
 
-Finally, copy the assets from `static-assets` to your detailed analysis host as well. Ensure that paths (directories) are preserved.
+---
 
-## Run
+## 📁 Project Structure
+```
+├── asl-website/              # Frontend files (HTML/JS/UI for sign testing)
+    ├─backend.js              # Node.js backend (video upload + Python inference)
+├── model/                    # Python scripts and ML models for recognition 
+├── .firebase/ and config     # Firebase (optional, not active in this version)
+```
 
-### Main dictionary interface
+---
 
-In the Conda environment, navigate to `gradio-recognition-screen` and run `python -m app`. If you run this locally, you will be able to access a port on the localhost (the output console will provide this port). If you run this on a server, make sure to reroute your HTTP (or HTTPS) port to this port.
+## 🔧 Installation
 
-### Detailed analysis
+### 1. Clone this repository
+```bash
+git clone https://github.com/chaelin0722/ASL-emergency.git
+cd asl-emergency
+```
 
-Host the contents of `results-screen` as a regular HTML website. There are many ways to achive this. For development and testing purposes, you may want to simply run this on `localhost`. For productionizing, a simple FPT server will do.
+### 2. Install Node.js dependencies (for backend)
+```bash
+npm install
+```
+
+### 3. Set up Python environment (optional, for model)
+If using the Python-based inference system:
+```bash
+cd model
+pip install -r requirements.txt
+```
+
+---
+
+## ▶️ Running the Program
+
+### 1. Start the Node.js Backend Server
+This handles file uploads and calls the Python recognition script.
+```bash
+node backend.js
+```
+By default, it runs on `http://localhost:3000`
+
+### 2. Start the Frontend
+From the root directory:
+```bash
+python3 -m http.server 8080
+```
+Visit the application in your browser at: `http://localhost:8080/asl-website/`
+
+---
+
+## ✨ Features
+- Upload a signing video and run inference to identify the signed ASL term
+- Receive top predictions and immediate visual feedback
+- Interactive testing mode with retry logic:
+  - 1st wrong attempt → retry
+  - 2nd wrong attempt → skip and proceed to next term
+- Vocabulary focused on 79 emergency-related ASL glosses
+
+---
+
+## 👩‍⚕️ Target Users
+- EMS personnel (paramedics, EMTs)
+- First responders in the field
+- Potential future use by primary care physicians and pharmacists
+
+---
+
+
+If you have any issues running the project, please create an issue or contact the maintainers.
