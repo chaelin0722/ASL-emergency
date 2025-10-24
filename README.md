@@ -5,6 +5,7 @@
 
 This repository contains the codebase for <a href="https://dl.acm.org/doi/10.1145/3663547.3759746">Signing for Care paper</a>, a prototype designed to support emergency medical service (EMS) providers in acquiring essential ASL vocabulary. 
 
+<br><br>
 
 <img width="1219" height="388" alt="Screenshot 2025-10-23 at 8 46 40 PM" src="https://github.com/user-attachments/assets/02a5fc76-8faa-412b-a1bc-ee68fa6da2b7" />
 
