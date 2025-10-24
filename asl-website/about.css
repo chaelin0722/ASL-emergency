@@ -1,0 +1,258 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+header {
+    width: 100%;
+    background-color: #333;
+    color: white;
+    padding: 12px 0;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: -2pc;
+    position: fixed; /* positions dropdown relative to header */
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+header nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+header nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+header nav a:hover {
+    color: #cce7ff;
+}
+
+footer {
+    width: 100%;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px; /* widened from 600px */
+    margin: 60px auto 12px; /* reduced bottom margin */
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center; /*all of it gets centered*/
+}
+
+.container + .container {
+    margin-top: 12px; /* reduced top margin between containers */
+}
+
+.container:last-of-type {
+    margin-bottom: 64px; /* extra space above footer for last box */
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+p {
+    text-align: center;
+    color: #555;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.btn-item {
+    padding: 10px 0;
+}
+
+.btn {
+    background-color: #054711;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    text-align: center;
+    transition: background-color 0.3s;
+    display: inline-block; /*makes sure buttons stay inline*/
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+#search-results {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: grey;
+    border: 1px solid #ccc;
+    max-width: 300px;
+    position: absolute;
+    top: 50px; /* adjusts to position below search bar */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: none; /* results are hidden by default */
+}
+
+#search-results li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+#search-results li:hover {
+    background-color: #000000;
+}
+
+#searchbar {
+    width: 300px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+#list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.term {
+    font-size: 1.2em;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.term:last-child {
+    border-bottom: none;
+}
+
+.scroll-box {
+    margin-top: 10px;
+    display: inline-block;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    background: #054711;
+    color: white;
+    font-weight: 600;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.scroll-box:hover {
+    background: #0056b3;
+}
+
+.quote-callout {
+    background: #e6f4ea;
+    border-left: 6px solid #054711;
+    color: #222;
+    max-width:800px;
+    margin: 24px auto; /* restore original margin */
+    padding: 18px 24px;
+    font-size:1.15em;
+    font-style: italic;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+
+/* grid card fixes!!!*/
+
+/* Grid for resource cards */
+.cards-grid{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(240px, 1fr));
+  gap: 32px;
+  align-items: stretch;
+  justify-items: stretch;
+  max-width: 1000px;
+  margin: 0 auto;         /* center the whole row */
+  padding: 0 8px;
+}
+
+/* Individual card (override global .container rules) */
+.card{
+  width: auto;            /* cancel .container width */
+  max-width: none;        /* cancel .container max-width */
+  margin: 0;              /* remove auto margins */
+  text-align: center;     /* card content centered only */
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.07);
+  padding: 24px;
+  min-height: 260px;
+
+  display: flex;          /* keep button aligned at bottom */
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card h3{ margin: 4px 0 10px; }
+.card p{ margin: 0 0 14px; color:#555; }
+.card .btn{ align-self: center; }
+
+/* Responsive: 2 cols on tablets, 1 col on phones */
+@media (max-width: 1000px){
+  .cards-grid{ grid-template-columns: repeat(2, minmax(240px, 1fr)); }
+}
+@media (max-width: 640px){
+  .cards-grid{ grid-template-columns: 1fr; gap: 20px; }
+}
+
+/* Scope overrides to nested containers used as cards inside a flex/grid row */
+.container > div[style*="display: flex"] > .container{
+  width: auto;            /* cancel global .container width */
+  max-width: 320px;       /* card width */
+  margin: 0;              /* no auto centering */
+  text-align: center;     /* keep card content centered */
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  padding: 22px;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* improve the row spacing */
+.container > div[style*="display: flex"]{
+  gap: 32px !important;           /* ensure spacing between cards */
+  justify-content: center !important;
+  align-items: stretch !important;
+  flex-wrap: wrap !important;
+}
+
+/* make 3-up feel even */
+@media (min-width: 900px){
+  .container > div[style*="display: flex"] > .container{
+    flex: 1 1 280px !important;
+  }
+}

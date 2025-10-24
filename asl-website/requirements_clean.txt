@@ -1,0 +1,49 @@
+# Core ML/DL packages
+torch==2.8.0
+torchvision==0.10.0
+torchmetrics==1.8.1
+pytorch-lightning==2.5.3
+
+# Computer Vision
+opencv-python==4.10.0.84
+opencv-contrib-python==4.10.0.84
+mediapipe==0.10.9
+pillow==11.1.0
+
+# Data Science
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.5.2
+scipy==1.13.1
+matplotlib==3.9.4
+seaborn==0.13.2
+
+# Video Processing
+ffmpeg-python==0.2.0
+moviepy==1.0.3
+imageio==2.37.0
+imageio-ffmpeg==0.6.0
+
+# Web Framework
+fastapi==0.111.0
+uvicorn==0.30.6
+flask==3.0.3
+
+# Utilities
+tqdm==4.67.1
+requests==2.32.3
+pyyaml==6.0.2
+python-dotenv==1.0.1
+
+# Sign Language Processing
+pose-format==0.7.0
+sign-language-segmentation @ git+https://github.com/sign-language-processing/segmentation@e3a020b969e022b745c2e98c996b83b2400dbe9c
+
+# JAX (if needed)
+jax==0.4.30
+jaxlib==0.4.30
+
+# Other dependencies
+h5py==3.12.1
+wandb==0.19.8
+pympi-ling==1.70.2

@@ -1,0 +1,130 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    min-height: 150vh;
+    padding-top: 100px;
+    flex-direction: column;
+}
+
+header, footer {
+    width: 100%;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    padding: 15px 0;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #cce7ff;
+}
+
+#search-results {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: grey;
+    border: 1px solid #ccc;
+    max-width: 300px;
+    position: absolute;
+    top: 50px; /* adjusts to position below search bar */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: none; /* results are hidden by default */
+}
+
+#search-results li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+#search-results li:hover {
+    background-color: #000000;
+}
+
+#searchbar {
+    width: 300px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+#list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.term {
+    font-size: 1.2em;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.term:last-child {
+    border-bottom: none;
+}
+
+select {
+    width: 150px;
+}
+
+.video-container {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center;      /* Center horizontally */
+}
+#term-display { /* Center the h1 text */
+    text-align: center;
+    font-size: large;
+}
+
+video {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    border-radius: 10px;
+}
+
+button {
+    background-color: #054711;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    margin: 10px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

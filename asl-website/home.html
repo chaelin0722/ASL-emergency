@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to our Handbook!</title>
+    <link rel="stylesheet" type="text/css" href="./home.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="resources.html">Resources</a>
+            <a href="test-home.html">Test</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+        <!--<input id="searchbar" type="text" name="search" placeholder="Search terms..." />-->
+        <ul id="search-results"></ul>
+    </header>
+
+    <div class="container" style="max-width: 1000px;">
+        <h1>Welcome to Signing For Care</h1>
+        <div style="max-width:600px; margin:0 auto;">
+            <p>Click on a category of words to get started. You can watch videos of each sign being performed, and then test your knowledge by performing the sign yourself.</p>
+        </div>
+        <div id="category-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; justify-items: center;">
+            <!-- Category cards with checkboxes -->
+            <div class="category-box" data-key="body-parts-1" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.10); padding: 24px; min-width: 220px; max-width: 320px; min-height: 220px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <h2 style="color:#054711; margin-bottom:16px;">Body Parts 1 (A-F)</h2>
+                <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%;">
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="body-parts-1.html" class="btn" style="width: 70%;">View</a>
+                        <input type="checkbox" class="view-checkbox" data-key="body-parts-1">
+                    </label>
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="test.html?category=body-parts-1" class="btn" style="width: 70%;">Test</a>
+                        <input type="checkbox" class="test-checkbox" data-key="body-parts-1">
+                    </label>
+                </div>
+            </div>
+            <!-- Repeat for all other categories, updating data-key accordingly -->
+            <div class="category-box" data-key="body-parts-2" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.10); padding: 24px; min-width: 220px; max-width: 320px; min-height: 220px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <h2 style="color:#054711; margin-bottom:16px;">Body Parts 2 (F-Z)</h2>
+                <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%;">
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="body-parts-2.html" class="btn" style="width: 70%;">View</a>
+                        <input type="checkbox" class="view-checkbox" data-key="body-parts-2">
+                    </label>
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="test.html?category=body-parts-2" class="btn" style="width: 70%;">Test</a>
+                        <input type="checkbox" class="test-checkbox" data-key="body-parts-2">
+                    </label>
+                </div>
+            </div>
+            <div class="category-box" data-key="symptoms-1" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.10); padding: 24px; min-width: 220px; max-width: 320px; min-height: 220px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <h2 style="color:#054711; margin-bottom:16px;">Symptoms 1 (A-I)</h2>
+                <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%;">
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="symptoms-1.html" class="btn" style="width: 70%;">View</a>
+                        <input type="checkbox" class="view-checkbox" data-key="symptoms-1">
+                    </label>
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="test.html?category=symptoms-1" class="btn" style="width: 70%;">Test</a>
+                        <input type="checkbox" class="test-checkbox" data-key="symptoms-1">
+                    </label>
+                </div>
+            </div>
+            <div class="category-box" data-key="symptoms-2" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.10); padding: 24px; min-width: 220px; max-width: 320px; min-height: 220px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <h2 style="color:#054711; margin-bottom:16px;">Symptoms 2 (P-Z)</h2>
+                <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%;">
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="symptoms-2.html" class="btn" style="width: 70%;">View</a>
+                        <input type="checkbox" class="view-checkbox" data-key="symptoms-2">
+                    </label>
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="test.html?category=symptoms-2" class="btn" style="width: 70%;">Test</a>
+                        <input type="checkbox" class="test-checkbox" data-key="symptoms-2">
+                    </label>
+                </div>
+            </div>
+            <div class="category-box" data-key="substance-related" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.10); padding: 24px; min-width: 220px; max-width: 320px; min-height: 220px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <h2 style="color:#054711; margin-bottom:16px;">Substance Related</h2>
+                <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%;">
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="substance-related.html" class="btn" style="width: 70%;">View</a>
+                        <input type="checkbox" class="view-checkbox" data-key="substance-related">
+                    </label>
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="test.html?category=substance-related" class="btn" style="width: 70%;">Test</a>
+                        <input type="checkbox" class="test-checkbox" data-key="substance-related">
+                    </label>
+                </div>
+            </div>
+            <div class="category-box" data-key="medical-terms-1" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.10); padding: 24px; min-width: 220px; max-width: 320px; min-height: 220px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <h2 style="color:#054711; margin-bottom:16px;">Medical Terms (A-P)</h2>
+                <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%;">
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="medical-terms-1.html" class="btn" style="width: 70%;">View</a>
+                        <input type="checkbox" class="view-checkbox" data-key="medical-terms-1">
+                    </label>
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="test.html?category=medical-terms-1" class="btn" style="width: 70%;">Test</a>
+                        <input type="checkbox" class="test-checkbox" data-key="medical-terms-1">
+                    </label>
+                </div>
+            </div>
+            <div class="category-box" data-key="medical-terms-2" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.10); padding: 24px; min-width: 220px; max-width: 320px; min-height: 220px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <h2 style="color:#054711; margin-bottom:16px;">Medical Terms (S-W)</h2>
+                <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%;">
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="medical-terms-2.html" class="btn" style="width: 70%;">View</a>
+                        <input type="checkbox" class="view-checkbox" data-key="medical-terms-2">
+                    </label>
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="test.html?category=medical-terms-2" class="btn" style="width: 70%;">Test</a>
+                        <input type="checkbox" class="test-checkbox" data-key="medical-terms-2">
+                    </label>
+                </div>
+            </div>
+            <div class="category-box" data-key="injuries" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.10); padding: 24px; min-width: 220px; max-width: 320px; min-height: 220px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <h2 style="color:#054711; margin-bottom:16px;">Injuries</h2>
+                <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%;">
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="injuries.html" class="btn" style="width: 70%;">View</a>
+                        <input type="checkbox" class="view-checkbox" data-key="injuries">
+                    </label>
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="test.html?category=injuries" class="btn" style="width: 70%;">Test</a>
+                        <input type="checkbox" class="test-checkbox" data-key="injuries">
+                    </label>
+                </div>
+            </div>
+            <div class="category-box" data-key="emergencies" style="background: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.10); padding: 24px; min-width: 220px; max-width: 320px; min-height: 220px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <h2 style="color:#054711; margin-bottom:16px;">Emergencies</h2>
+                <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%;">
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="others.html" class="btn" style="width: 70%;">View</a>
+                        <input type="checkbox" class="view-checkbox" data-key="emergencies">
+                    </label>
+                    <label style="width: 80%; display: flex; align-items: center; justify-content: space-between;">
+                        <a href="test.html?category=emergencies" class="btn" style="width: 70%;">Test</a>
+                        <input type="checkbox" class="test-checkbox" data-key="emergencies">
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div style="max-width: 600px; margin: 32px auto 0 auto;">
+            <label style="font-weight:600;">Viewed Progress</label>
+            <div style="background:#eee; border-radius:8px; height:24px; width:100%; margin-bottom:12px;">
+                <div id="view-progress" style="background:#054711; height:100%; border-radius:8px; width:0%; transition:width 0.3s;"></div>
+            </div>
+            <label style="font-weight:600;">Tested Progress</label>
+            <div style="background:#eee; border-radius:8px; height:24px; width:100%;">
+                <div id="test-progress" style="background:#a71e90; height:100%; border-radius:8px; width:0%; transition:width 0.3s;"></div>
+            </div>
+            <button id="reset-checkboxes" class="btn" style="margin-top:18px; width:100%;">Reset Checkboxes</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttonItems = document.querySelectorAll('.btn-item');
+    
+            buttonItems.forEach((item, index) => {
+                const checkbox1 = item.querySelector('.checkbox-1');
+                const checkbox2 = item.querySelector('.checkbox-2');
+                const button = item.querySelector('.btn');
+    
+                if (!button || !checkbox1) return;
+    
+                const storageKey = `visited-${index}`;
+    
+                if (localStorage.getItem(storageKey) === 'visited') {
+                    checkbox1.checked = true;
+                    checkbox2.disabled = false;
+                }
+    
+                button.addEventListener('click', function () {
+                    if (button.id !== "reset-btn") {
+                        console.log("button clicked!");
+                        checkbox1.checked = true;
+                        checkbox2.disabled = false;
+                        localStorage.setItem(storageKey, 'visited');
+    
+                        // page navigation
+                        const title = button.getAttribute('data-title');
+                        if (title) {
+                            const pageTitle = title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '.html';
+                            window.location.href = pageTitle;
+                        }
+                    }
+                });
+    
+                checkbox1.addEventListener('change', async () => {
+                    if (checkbox1.checked) {
+                        checkbox2.disabled = false;
+    
+                        // Firebase save progress (optional - skip for now)
+                        /*
+                        if (typeof auth !== 'undefined') {
+                            const user = auth.currentUser;
+                            if (user) {
+                                await saveUserProgress(user.uid, checkbox1.getAttribute('data-term'), true);
+                            }
+                        }
+                        */
+                    } else {
+                        checkbox2.disabled = true;
+                        checkbox2.checked = false;
+                    }
+                });
+            });
+    
+            const resetButton = document.getElementById('reset-btn');
+            if (!resetButton) {
+                console.error("Reset button not found!");
+            } else {
+                console.log("Reset found!");
+                resetButton.addEventListener("click", function () {
+                    localStorage.clear();
+                    document.querySelectorAll('.checkbox-1').forEach(cb => {
+                        cb.checked = false;
+                    });
+                    document.querySelectorAll('.checkbox-2').forEach(cb => {
+                        cb.checked = false;
+                        cb.disabled = true;
+                    });
+                });
+            }
+    
+            console.log("Page loaded, script running...");
+        });
+    </script>
+    </body>
+    </html>
+    
+    <!--<script type="module" src="./home.js"></script>-->
+    <script src="home.js" defer></script>
+    <script type="module" src="./header.js"></script>
+
+    <footer>
+        <p>&copy; 2025 KrishnanMcLaren. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
+
+<script>
+const categories = [
+    'body-parts-1', 'body-parts-2', 'symptoms-1', 'symptoms-2', 'substance-related', 'medical-terms-1', 'medical-terms-2', 'injuries', 'emergencies'
+];
+function updateProgress() {
+    let viewed = 0, tested = 0;
+    categories.forEach(key => {
+        if(localStorage.getItem('viewed-' + key) === 'true') viewed++;
+        if(localStorage.getItem('tested-' + key) === 'true') tested++;
+    });
+    document.getElementById('view-progress').style.width = (viewed / categories.length * 100) + '%';
+    document.getElementById('test-progress').style.width = (tested / categories.length * 100) + '%';
+}
+document.querySelectorAll('.view-checkbox').forEach(cb => {
+    const key = cb.getAttribute('data-key');
+    cb.checked = localStorage.getItem('viewed-' + key) === 'true';
+    cb.addEventListener('change', function() {
+        localStorage.setItem('viewed-' + key, cb.checked ? 'true' : 'false');
+        updateProgress();
+    });
+});
+document.querySelectorAll('.test-checkbox').forEach(cb => {
+    const key = cb.getAttribute('data-key');
+    cb.checked = localStorage.getItem('tested-' + key) === 'true';
+    cb.addEventListener('change', function() {
+        localStorage.setItem('tested-' + key, cb.checked ? 'true' : 'false');
+        updateProgress();
+    });
+});
+document.querySelectorAll('.category-box .btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const parent = btn.closest('.category-box');
+        const key = parent.getAttribute('data-key');
+        if(btn.textContent === 'View') {
+            localStorage.setItem('viewed-' + key, 'true');
+            parent.querySelector('.view-checkbox').checked = true;
+        } else if(btn.textContent === 'Test') {
+            localStorage.setItem('tested-' + key, 'true');
+            parent.querySelector('.test-checkbox').checked = true;
+        }
+        updateProgress();
+    });
+});
+document.getElementById('reset-checkboxes').addEventListener('click', function() {
+    categories.forEach(key => {
+        localStorage.removeItem('viewed-' + key);
+        localStorage.removeItem('tested-' + key);
+    });
+    document.querySelectorAll('.view-checkbox').forEach(cb => cb.checked = false);
+    document.querySelectorAll('.test-checkbox').forEach(cb => cb.checked = false);
+    updateProgress();
+});
+updateProgress();
+</script>

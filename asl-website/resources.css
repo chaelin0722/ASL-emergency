@@ -1,0 +1,137 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+header {
+    width: 100%;
+    background-color: #333;
+    color: white;
+    padding: 12px 0;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: -2pc;
+    position: fixed; /* positions dropdown relative to header */
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+header nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+header nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+header nav a:hover {
+    color: #cce7ff;
+}
+
+footer {
+    width: 100%;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+}
+
+.container {
+    display: block; /* use about.css for full container styling */
+}
+
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto; /* inside the container padding */
+}
+
+.item {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.2s;
+    width: auto;
+    height: 100%;
+    align-items: center;
+}
+
+.item:hover {
+    transform: scale(1.05);
+}
+
+.img-with-text {
+    width: auto;
+    height: 10%;
+    margin-bottom: 10px;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.img-with-text h1 {
+    color: #333;
+}
+
+#search-results {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: grey;
+    border: 1px solid #ccc;
+    max-width: 300px;
+    position: absolute;
+    top: 50px; /* adjusts to position below search bar */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: none; /* results are hidden by default */
+}
+
+#search-results li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+#search-results li:hover {
+    background-color: #000000;
+}
+
+#searchbar {
+    width: 300px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+#list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.term {
+    font-size: 1.2em;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.term:last-child {
+    border-bottom: none;
+}
+
