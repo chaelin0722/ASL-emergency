@@ -12,7 +12,7 @@ app.use(express.json());
 // File storage config
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "/Users/zzenninkim/Research/ASL-emergency-final/ASL-emergency/asl-website/recorded-videos");
+    cb(null, "ASL-emergency-final/ASL-emergency/asl-website/recorded-videos");
   },
   filename: function (req, file, cb) {
     cb(null, "recorded-video.webm");  // Always overwrite with same name
@@ -34,7 +34,7 @@ app.post("/process-video", (req, res) => {
   console.log("filename received:", req.body.filename);
 
   // define values
-  const videoDir = "/Users/zzenninkim/Research/ASL-emergency-final/ASL-emergency/asl-website/recorded-videos";
+  const videoDir = "ASL-emergency-final/ASL-emergency/asl-website/recorded-videos";
   const videoPath = path.join(videoDir, req.body.filename);
   // JSON file should have same name as video but with .json extension
   const jsonFilename = req.body.filename.replace(/\.[^/.]+$/, ".json");
@@ -46,7 +46,7 @@ app.post("/process-video", (req, res) => {
     "--video",
     videoPath,
   ], {
-    cwd: "/Users/zzenninkim/Research/ASL-emergency-final/ASL-emergency/model"  // Set working directory to model folder
+    cwd: "ASL-emergency-final/ASL-emergency/model"  // Set working directory to model folder
   });
 
   // make json
