@@ -1,5 +1,6 @@
 import math
 import os
+import sys
 import subprocess
 import argparse
 import ffmpeg
@@ -12,6 +13,9 @@ import mediapipe as mp
 import numpy as np
 import pandas as pd
 
+# Add parent directory to Python path to find architecture module
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 # Initialize mediapipe drawing class - to draw the landmarks points.
 mp_drawing = mp.solutions.drawing_utils
 mp_holistic = mp.solutions.holistic
@@ -21,7 +25,7 @@ from architecture.st_gcn import STGCN
 from architecture.fc import FC
 from architecture.network import Network
 
-weight = "/Users/zzenninkim/Documents/Research/asl-emergency/model/ST-GCN/ASL_citizen_stgcn_weights.pt"
+weight = "/asl-emergency/model/ST-GCN/_training_from_aslcitizen001782_0.741972.pt"
 
 #Given a sorted output from the model aka ranked list, returns
 #rank of ground truth and list of other metrics
@@ -67,7 +71,7 @@ torch.set_default_dtype(torch.float64)
 
 device = torch.device("cpu")
 
-n_classes = 2731
+n_classes = 80
 
 
 #load model
@@ -83,13 +87,19 @@ fc = FC(n_features=n_features, num_class=n_classes, dropout_ratio=0.05)
 pose_model = Network(encoder=stgcn, decoder=fc)
 
 #print(os.getcwd())
-pose_model.load_state_dict(torch.load((weight),map_location=torch.device('cpu')))
-pose_model.to(device)
-
-
-#checkpoint = torch.load(weight, map_location=torch.device('cpu'))
-#pose_model.load_state_dict(checkpoint["model_state_dict"])
+#pose_model.load_state_dict(torch.load((weight),map_location=torch.device('cpu')))
 #pose_model.to(device)
+
+checkpoint = torch.load(weight, map_location=torch.device('cpu'))
+
+# Handle different checkpoint formats
+if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint:
+    # New format with dictionary
+    pose_model.load_state_dict(checkpoint["model_state_dict"])
+else:
+    # Direct state_dict format (from stgcn_training.py)
+    pose_model.load_state_dict(checkpoint)
+pose_model.to(device)
 
 
 
@@ -159,9 +169,9 @@ def read_time_segments(file_path):
 
 def recognize_segments_in_video(pose_npy_path, fps):
     result_list = []
-    df = pd.read_csv('/Users/zzenninkim/Documents/Research/asl-emergency/model/ST-GCN/ASLcitizen_gloss_labels.csv')
+    df = pd.read_csv('/Users/zzenninkim/Research/asl-emergency/model/ST-GCN/ASL_gloss_80.csv')
     index_to_gloss = dict(zip(df["Index"], df["Gloss"]))
-
+    
     # .npy  (T, V, C) == (num of frames, num of landmarks, XY)
     pose_data = np.load(pose_npy_path)
     length = pose_data.shape[0]
@@ -212,8 +222,8 @@ def recognize_segments_in_video(pose_npy_path, fps):
     pred_args = torch.argsort(y_pred_tag, dim=1, descending=True)
 
     # bring top 20 results
-    top_20_preds = pred_args[0][:20].tolist()
-    top_20_confidences = y_pred_tag[0][pred_args[0][:20]].tolist()
+    top_20_preds = pred_args[0][:80].tolist()
+    top_20_confidences = y_pred_tag[0][pred_args[0][:80]].tolist()
 
     # Gloss mapping
     mapped_labels = [index_to_gloss[idx] for idx in top_20_preds]
@@ -247,7 +257,7 @@ def convert_to_mp4(video_path):
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--video', default=None, required=False, type=str, help='path to video file')
+    parser.add_argument('--video', default=None, required=True, type=str, help='path to video file')
 
     return parser.parse_args()
 
@@ -255,6 +265,10 @@ def get_args():
 if __name__ == "__main__":
     args = get_args()
     video_path = args.video
+    if video_path is None:
+        print("Error: Please provide a video file path using --video argument")
+        print("Example: python model.py --video /path/to/your/video.mp4")
+        exit(1)
 
     video_path = convert_to_mp4(video_path)
     print("Start ASL recognition")
