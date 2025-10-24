@@ -1,6 +1,14 @@
-# Signing for Care: ASL Learning Tool for Emergency Responders
+# Signing for Care: A Demo and Initial Evaluation of an American Sign Language Learning Tool for Emergency Medical Responders
+<p align="center">
+  <img align="right" width="341" height="116" alt="Screenshot 2025-10-23 at 8 47 13 PM" src="https://github.com/user-attachments/assets/0992dc3f-82ab-47fd-811a-9b9ca796887f" />
+</p>
 
-This repository contains the codebase for **"Signing for Care: A Demo and Initial Evaluation of an American Sign Language Learning Tool for Emergency Medical Responders"**, a prototype designed to support emergency medical service (EMS) providers in acquiring essential ASL vocabulary. 
+This repository contains the codebase for <a href="https://dl.acm.org/doi/10.1145/3663547.3759746">Signing for Care paper</a>, a prototype designed to support emergency medical service (EMS) providers in acquiring essential ASL vocabulary. 
+
+
+<img width="1219" height="388" alt="Screenshot 2025-10-23 at 8 46 40 PM" src="https://github.com/user-attachments/assets/02a5fc76-8faa-412b-a1bc-ee68fa6da2b7" />
+
+
 
 Deaf and Hard of Hearing (DHH) individuals face serious communication barriers in emergency healthcare settings, where the absence of interpreters can result in delayed or improper treatment. This system provides EMS personnel with:
 
@@ -33,6 +41,12 @@ npm install
 
 ### 3. Set up Python environment (optional, for model)
 If using the Python-based inference system:
+```bash
+#first, install python version 3.9
+conda create -n env_name python=3.9
+conda activate env_name
+```
+
 ```bash
 cd model
 pip install -r requirements.txt
