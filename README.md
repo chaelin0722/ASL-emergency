@@ -89,6 +89,25 @@ Visit the application in your browser at: `http://localhost:8080/home.html`
 - First responders in the field
 - Potential future use by primary care physicians and pharmacists
 
+
+## 📚 Citation
+
+If you use this repository in your research, please cite:
+
+```
+@inproceedings{kim2025signingforcare,
+author    = {Kim, Chaelin and McLaren, Cameron and Krishnan, Madhangi and Modayur, Nikhil and Hassan, Saad},
+title     = {Signing for Care: A Demo and Initial Evaluation of an American Sign Language Learning Tool for Emergency Medical Service Providers},
+booktitle = {Proceedings of the 27th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS ’25)},
+year      = {2025},
+publisher = {Association for Computing Machinery},
+address   = {New York, NY, USA},
+doi       = {10.1145/3663547.3759746},
+url       = {https://doi.org/10.1145/3663547.3759746}
+}
+
+```
+
 ---
 
 
